@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CodeForge — AI Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Fira+Code:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="/static/css/style.css"/>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+
+<div class="app">
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">CF</div>
+      <div>
+        <div class="logo-title">CodeForge</div>
+        <div class="logo-sub">AI Studio</div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Quick Prompts</div>
+      <button class="qp-btn" onclick="setPrompt('Write a Python class implementing a doubly linked list with insert, delete, and search methods')">
+        <span class="qp-icon">🐍</span>
+        <span>Linked List (Python)</span>
+      </button>
+      <button class="qp-btn" onclick="setPrompt('Create a TypeScript generic utility type for deeply nested optional objects')">
+        <span class="qp-icon">📘</span>
+        <span>TS Generic Types</span>
+      </button>
+      <button class="qp-btn" onclick="setPrompt('Build an Express.js REST API with CRUD operations for a todo app with SQLite')">
+        <span class="qp-icon">🟨</span>
+        <span>Express CRUD API</span>
+      </button>
+      <button class="qp-btn" onclick="setPrompt('Write a Rust function that implements merge sort on a vector of integers')">
+        <span class="qp-icon">🦀</span>
+        <span>Merge Sort (Rust)</span>
+      </button>
+      <button class="qp-btn" onclick="setPrompt('Write a Go HTTP server with middleware for logging, CORS, and rate limiting')">
+        <span class="qp-icon">🐹</span>
+        <span>Go HTTP Server</span>
+      </button>
+      <button class="qp-btn" onclick="setPrompt('Create a SQL query to find top 5 customers by revenue with month-over-month growth')">
+        <span class="qp-icon">🗄️</span>
+        <span>SQL Analytics</span>
+      </button>
+      <button class="qp-btn" onclick="setPrompt('Write a bash script to monitor disk usage and send an alert email when usage exceeds 85%')">
+        <span class="qp-icon">🖥️</span>
+        <span>Bash Monitor</span>
+      </button>
+      <button class="qp-btn" onclick="setPrompt('Create a Java Spring Boot controller with JWT authentication and role-based access')">
+        <span class="qp-icon">☕</span>
+        <span>Spring JWT Auth</span>
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="model-info">
+        <div class="model-dot" id="model-dot"></div>
+        <div>
+          <div class="model-name">phi-4-mini-instruct</div>
+          <div class="model-provider">via NIM API</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="main">
+
+    <header class="topbar">
+      <button class="menu-btn" id="menu-btn" onclick="toggleSidebar()">☰</button>
+      <div class="topbar-title">
+        <span class="topbar-logo">CodeForge</span>
+        <span class="topbar-sep">/</span>
+        <span class="topbar-page" id="topbar-page">New Generation</span>
+      </div>
+      <div class="topbar-right">
+        <div class="status-badge" id="status-badge">
+          <span class="status-pip idle" id="status-pip"></span>
+          <span id="status-label">idle</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="content">
+
+      <div class="panel input-panel">
+        <div class="panel-hd">
+          <span class="panel-hd-label">01 — Prompt</span>
+          <div class="panel-hd-actions">
+            <button class="mini-btn" onclick="clearPrompt()">Clear</button>
+          </div>
+        </div>
+
+        <div class="textarea-wrap">
+          <textarea
+            id="prompt-input"
+            placeholder="Describe the code you want to generate...&#10;&#10;e.g. Write a Python async function that fetches data from multiple URLs concurrently using aiohttp and returns results as a list"
+          ></textarea>
+          <div class="char-count" id="char-count">0 chars</div>
+        </div>
+
+        <div class="options-grid">
+          <div class="opt-group">
+            <label class="opt-label">Language</label>
+            <div class="select-wrap">
+              <select id="lang-select">
+                <option value="python">🐍 Python</option>
+                <option value="javascript">🟨 JavaScript</option>
+                <option value="typescript">📘 TypeScript</option>
+                <option value="go">🐹 Go</option>
+                <option value="rust">🦀 Rust</option>
+                <option value="java">☕ Java</option>
+                <option value="cpp">⚙️ C++</option>
+                <option value="c">🔧 C</option>
+                <option value="php">🐘 PHP</option>
+                <option value="ruby">💎 Ruby</option>
+                <option value="swift">🍎 Swift</option>
+                <option value="kotlin">🎯 Kotlin</option>
+                <option value="bash">🖥️ Bash</option>
+                <option value="sql">🗄️ SQL</option>
+                <option value="auto">✨ Auto-detect</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="opt-group">
+            <label class="opt-label">Code Style</label>
+            <div class="select-wrap">
+              <select id="style-select">
+                <option value="clean">Clean & Commented</option>
+                <option value="verbose">Verbose + Docs</option>
+                <option value="terse">Terse & Minimal</option>
+                <option value="beginner">Beginner Friendly</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="opt-group">
+            <label class="opt-label">Temperature — <span id="temp-display">0.1</span></label>
+            <input type="range" id="temp-range" min="0" max="10" value="1" step="1" class="slider"/>
+          </div>
+
+          <div class="opt-group">
+            <label class="opt-label">Max Tokens — <span id="tok-display">1024</span></label>
+            <input type="range" id="tok-range" min="256" max="2048" value="1024" step="256" class="slider"/>
+          </div>
+        </div>
+
+        <div class="panel-footer">
+          <span class="hint">Tip: Press <kbd>Ctrl</kbd>+<kbd>Enter</kbd> to generate</span>
+          <button class="gen-btn" id="gen-btn" onclick="generate()">
+            <span id="gen-btn-icon">⚡</span>
+            <span id="gen-btn-text">Generate Code</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="panel output-panel">
+        <div class="panel-hd">
+          <span class="panel-hd-label">02 — Output</span>
+          <div class="panel-hd-actions">
+            <button class="mini-btn" id="tab-hi" onclick="setTab('hi')">Highlighted</button>
+            <button class="mini-btn active" id="tab-raw" onclick="setTab('raw')">Raw</button>
+            <div class="divider-v"></div>
+            <button class="mini-btn" onclick="copyCode()" id="copy-btn">Copy</button>
+            <button class="mini-btn" onclick="saveCode()">Save</button>
+            <button class="mini-btn" onclick="clearOutput()">Clear</button>
+          </div>
+        </div>
+
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+
+        <div class="empty-state" id="empty-state">
+          <div class="empty-graphic">
+            <div class="empty-bracket">{</div>
+            <div class="empty-mid">
+              <div class="empty-line"></div>
+              <div class="empty-line short"></div>
+              <div class="empty-line"></div>
+              <div class="empty-line shorter"></div>
+            </div>
+            <div class="empty-bracket">}</div>
+          </div>
+          <p class="empty-text">Your generated code will stream here in real time</p>
+        </div>
+
+        <div class="code-container" id="code-container" style="display:none">
+          <div class="line-numbers" id="line-numbers"></div>
+          <pre class="code-pre" id="code-pre"></pre>
+        </div>
+
+        <div class="stats-bar" id="stats-bar" style="display:none">
+          <span class="stat"><span class="stat-label">lines</span> <span class="stat-val" id="s-lines">0</span></span>
+          <span class="stat"><span class="stat-label">chars</span> <span class="stat-val" id="s-chars">0</span></span>
+          <span class="stat"><span class="stat-label">lang</span> <span class="stat-val" id="s-lang">—</span></span>
+          <span class="stat"><span class="stat-label">model</span> <span class="stat-val">phi-4-mini</span></span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="/static/js/main.js"></script>
+</body>
+</html>
