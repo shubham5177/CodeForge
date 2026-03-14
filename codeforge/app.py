@@ -5,7 +5,7 @@ import urllib.error
 
 app = Flask(__name__)
 
-API_KEY = "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"
+API_KEY = "API Key"
 BASE_URL = "https://integrate.api.nvidia.com/v1/chat/completions"
 MODEL = "microsoft/phi-4-mini-instruct"
 
